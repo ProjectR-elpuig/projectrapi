@@ -1,40 +1,51 @@
 package com.alex.projectrapi.controller;
 
-import com.alex.projectrapi.dto.AuthRequest;
-import com.alex.projectrapi.dto.AuthResponse;
-import com.alex.projectrapi.security.JwtUtils;
+import com.alex.projectrapi.model.Usuario;
+import com.alex.projectrapi.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
-    private AuthenticationManager authManager;
-    @Autowired
-    private JwtUtils jwtUtils;
+    private UsuarioRepository usuarioRepository;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
-        try {
-            Authentication auth = authManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.username, request.password)
-            );
-            String token = jwtUtils.generateToken(request.username);
-            return ResponseEntity.ok(new AuthResponse(token));
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        Usuario usuario = usuarioRepository.findByUsernameAndPwd(loginRequest.getUsername(), loginRequest.getPassword());
+
+        System.out.println("USUARIO: " + usuario + " - " + loginRequest.getUsername() + " - " + loginRequest.getPassword());
+        if (usuario != null) {
+            return ResponseEntity.ok(usuario);
+        } else {
+            return ResponseEntity.status(401).body("Credenciales inválidas");
+        }
+    }
+
+    // Clase interna para manejar la solicitud de login
+    private static class LoginRequest {
+        private String username;
+        private String password;
+
+        // Getters y setters
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
         }
     }
 }
-

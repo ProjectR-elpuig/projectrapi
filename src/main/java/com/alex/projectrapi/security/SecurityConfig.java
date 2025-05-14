@@ -23,8 +23,11 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private JwtAuthFilter jwtFilter;
+    private final JwtAuthFilter jwtFilter;
+
+    public SecurityConfig(JwtAuthFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -39,8 +42,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authManager(HttpSecurity http, UserDetailsService uds)
-            throws Exception {
+    public AuthenticationManager authManager(HttpSecurity http, UserDetailsService uds) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(uds)
                 .passwordEncoder(passwordEncoder())
@@ -63,5 +65,12 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    // Añade el bean para el filtro (esto es clave)
+    @Bean
+    public JwtAuthFilter jwtFilter(JwtUtils jwtUtils, UserDetailsService uds) {
+        return new JwtAuthFilter(jwtUtils, uds);
+    }
 }
+
 

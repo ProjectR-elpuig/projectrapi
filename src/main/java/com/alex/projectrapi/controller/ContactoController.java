@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +36,9 @@ public class ContactoController {
         if (contactos.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+        // Ordenamos alfabeticamente
+        Collections.sort(contactos);
+
         return ResponseEntity.ok(contactos);
     }
 
@@ -58,7 +62,7 @@ public class ContactoController {
                             contacto.setName(request.getName());
                             return ResponseEntity.ok(contactoRepository.save(contacto));
                         }))
-                .orElse(ResponseEntity.badRequest().body("Usuario o teléfono no encontrado"));
+                .orElse(null);
     }
 
     // Eliminar contacto

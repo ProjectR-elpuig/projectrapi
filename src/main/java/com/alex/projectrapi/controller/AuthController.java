@@ -3,6 +3,7 @@ package com.alex.projectrapi.controller;
 import com.alex.projectrapi.config.JwtService;
 import com.alex.projectrapi.model.Usuario;
 import com.alex.projectrapi.repository.UsuarioRepository;
+import com.alex.projectrapi.utils.PhoneNumberGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -67,7 +68,7 @@ public class AuthController {
         usuario.setCitizenId(UUID.randomUUID().toString()); // Generar un ID único
         usuario.setUsername(registerRequest.getUsername());
         usuario.setPwd(passwordEncoder.encode(registerRequest.getPassword()));
-        usuario.setPhoneNumber(registerRequest.getPhoneNumber());
+        usuario.setPhoneNumber(new PhoneNumberGenerator(usuarioRepository).generatePhoneNumber());
 
         // Guardar el usuario en la base de datos
         usuarioRepository.save(usuario);
@@ -114,7 +115,6 @@ public class AuthController {
     private static class RegisterRequest {
         private String username;
         private String password;
-        private String phoneNumber;
 
         public String getUsername() {
             return username;
@@ -130,14 +130,6 @@ public class AuthController {
 
         public void setPassword(String password) {
             this.password = password;
-        }
-
-        public String getPhoneNumber() {
-            return phoneNumber;
-        }
-
-        public void setPhoneNumber(String phoneNumber) {
-            this.phoneNumber = phoneNumber;
         }
     }
 }

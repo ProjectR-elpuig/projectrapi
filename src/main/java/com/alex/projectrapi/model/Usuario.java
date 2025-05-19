@@ -23,4 +23,8 @@ public class Usuario {
 
     @Column(name = "phone_number", unique = true)
     private String phoneNumber;
+
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private byte[] img; // Nuevo campo
 }

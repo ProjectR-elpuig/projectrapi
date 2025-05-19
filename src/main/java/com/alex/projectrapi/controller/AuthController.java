@@ -1,10 +1,18 @@
 package com.alex.projectrapi.controller;
 
+import com.alex.projectrapi.config.JwtService;
 import com.alex.projectrapi.model.Usuario;
 import com.alex.projectrapi.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -12,26 +20,40 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Autowired
     private UsuarioRepository usuarioRepository;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        Usuario usuario = usuarioRepository.findByUsernameAndPwd(loginRequest.getUsername(), loginRequest.getPassword());
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
+                )
+        );
 
-        System.out.println("USUARIO: " + usuario + " - " + loginRequest.getUsername() + " - " + loginRequest.getPassword());
-        if (usuario != null) {
-            return ResponseEntity.ok(usuario);
-        } else {
-            return ResponseEntity.status(401).body("Credenciales inválidas");
-        }
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String token = jwtService.generateToken(userDetails);
+
+        Usuario usuario = usuarioRepository.findByUsername(loginRequest.getUsername())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("usuario", usuario);
+
+        return ResponseEntity.ok(response);
     }
 
-    // Clase interna para manejar la solicitud de login
     private static class LoginRequest {
         private String username;
         private String password;
 
-        // Getters y setters
         public String getUsername() {
             return username;
         }

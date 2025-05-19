@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "contacts")
-public class Contacto {
+public class Contacto implements Comparable<Contacto> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +22,9 @@ public class Contacto {
 
     @Column(nullable = false)
     private String name;
+
+    @Override
+    public int compareTo(Contacto o) {
+        return this.name.compareToIgnoreCase(o.getName());
+    }
 }

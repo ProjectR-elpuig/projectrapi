@@ -23,8 +23,8 @@ public class LoadDatabase {
             productoRepository.save(new Producto(null, "Tablet", "Tablet de 10 pulgadas", 299.99, 15));
 
             // Usuarios de prueba con contraseñas encriptadas
-            usuarioRepository.save(new Usuario("ID123", "usuario1", passwordEncoder.encode("clave123"), "5551234"));
-            usuarioRepository.save(new Usuario("ID456", "usuario2", passwordEncoder.encode("clave456"), "5555678"));
+            usuarioRepository.save(new Usuario("ID123", "usuario1", passwordEncoder.encode("clave123"), "5551234", null));
+            usuarioRepository.save(new Usuario("ID456", "usuario2", passwordEncoder.encode("clave456"), "5555678", null));
         };
     }
 }

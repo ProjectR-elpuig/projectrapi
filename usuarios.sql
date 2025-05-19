@@ -1,8 +1,0 @@
-CREATE TABLE usuarios (
-    citizenid VARCHAR(50) PRIMARY KEY,
-    username VARCHAR(255) UNIQUE,
-    pwd VARCHAR(255),
-    phone_number VARCHAR(50) UNIQUE
-);
-
--- CREA LA BASE DE DSTOS CON EL NOMBRE QUE ESTA EN EL PROPERTIES

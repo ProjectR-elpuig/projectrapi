@@ -2,24 +2,6 @@
 CREATE DATABASE IF NOT EXISTS `projectr` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci */;
 USE `projectr`;
 
--- Dumping structure for table projectr.contacts
-CREATE TABLE IF NOT EXISTS `contacts` (
-  `contactid` int(11) NOT NULL AUTO_INCREMENT,
-  `citizenid` varchar(50) DEFAULT NULL,
-  `phone_number` varchar(50) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`contactid`),
-  UNIQUE KEY `UC_Contact` (`citizenid`,`phone_number`),
-  KEY `phone_number` (`phone_number`),
-  CONSTRAINT `contacts_ibfk_1` FOREIGN KEY (`citizenid`) REFERENCES `usuarios` (`citizenid`),
-  CONSTRAINT `contacts_ibfk_2` FOREIGN KEY (`phone_number`) REFERENCES `usuarios` (`phone_number`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
--- Dumping data for table projectr.contacts: ~2 rows (approximately)
-INSERT INTO `contacts` (`contactid`, `citizenid`, `phone_number`, `name`) VALUES
-	(2, '58a570d8-6b21-4ae6-a2ff-7dda8a06e28e', '660596259', 'Davide desde alex :)'),
-	(8, '58a570d8-6b21-4ae6-a2ff-7dda8a06e28e', '5551234', 'ausuario1 desde alex :)');
-
 -- Dumping structure for table projectr.productos
 CREATE TABLE IF NOT EXISTS `productos` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
@@ -163,8 +145,20 @@ INSERT INTO `usuarios` (`citizenid`, `username`, `pwd`, `img`, `phone_number`) V
 	('ID123', 'usuario1', '$2a$10$aeCsqejaNk68vpyyD.njfu2mJqC11dz90wXBmQ902f3S0rEC5gbOS', NULL, '5551234'),
 	('ID456', 'usuario2', '$2a$10$oNHtBux2P8tXFZQEcgzYyurrcR65wag0Gv8D6.wTuDhwLKslBPq5S', NULL, '5555678');
 
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+-- Dumping structure for table projectr.contacts
+CREATE TABLE IF NOT EXISTS `contacts` (
+                                          `contactid` int(11) NOT NULL AUTO_INCREMENT,
+    `citizenid` varchar(50) DEFAULT NULL,
+    `phone_number` varchar(50) DEFAULT NULL,
+    `name` varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`contactid`),
+    UNIQUE KEY `UC_Contact` (`citizenid`,`phone_number`),
+    KEY `phone_number` (`phone_number`),
+    CONSTRAINT `contacts_ibfk_1` FOREIGN KEY (`citizenid`) REFERENCES `usuarios` (`citizenid`),
+    CONSTRAINT `contacts_ibfk_2` FOREIGN KEY (`phone_number`) REFERENCES `usuarios` (`phone_number`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- Dumping data for table projectr.contacts: ~2 rows (approximately)
+INSERT INTO `contacts` (`contactid`, `citizenid`, `phone_number`, `name`) VALUES
+                                                                              (2, '58a570d8-6b21-4ae6-a2ff-7dda8a06e28e', '660596259', 'Davide desde alex :)'),
+                                                                              (8, '58a570d8-6b21-4ae6-a2ff-7dda8a06e28e', '5551234', 'ausuario1 desde alex :)');

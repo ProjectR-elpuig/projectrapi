@@ -1,8 +1,25 @@
--- Dumping database structure for projectr
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Versión del servidor:         11.4.2-MariaDB - mariadb.org binary distribution
+-- SO del servidor:              Win64
+-- HeidiSQL Versión:             12.7.0.6850
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+-- Volcando estructura de base de datos para projectr
 CREATE DATABASE IF NOT EXISTS `projectr` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci */;
 USE `projectr`;
 
--- Dumping structure for table projectr.productos
+-- Volcando estructura para tabla projectr.productos
 CREATE TABLE IF NOT EXISTS `productos` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(255) NOT NULL,
@@ -10,9 +27,9 @@ CREATE TABLE IF NOT EXISTS `productos` (
   `precio` double NOT NULL,
   `stock` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=127 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table projectr.productos: ~102 rows (approximately)
+-- Volcando datos para la tabla projectr.productos: ~50 rows (aproximadamente)
 INSERT INTO `productos` (`id`, `nombre`, `descripcion`, `precio`, `stock`) VALUES
 	(1, 'Laptop', 'Laptop de última generación', 1200.99, 10),
 	(2, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
@@ -55,78 +72,20 @@ INSERT INTO `productos` (`id`, `nombre`, `descripcion`, `precio`, `stock`) VALUE
 	(42, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
 	(43, 'Laptop', 'Laptop de última generación', 1200.99, 10),
 	(44, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(45, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(46, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(47, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(48, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(49, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(50, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(51, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(52, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(53, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(54, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(55, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(56, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(57, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(58, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(59, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(60, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(61, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(62, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(63, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(64, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(65, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(66, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(67, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(68, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(69, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(70, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(71, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(72, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(73, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(74, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(75, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(76, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(77, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(78, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(79, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(80, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(81, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(82, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(83, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(84, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(85, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(86, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(87, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(88, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(89, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(90, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(91, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(92, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(93, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(94, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(95, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(96, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(97, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(98, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(99, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(100, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(101, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(102, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(103, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(104, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(105, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(106, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(107, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(108, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(109, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(110, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(111, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
-	(112, 'Laptop', 'Laptop de última generación', 1200.99, 10),
-	(113, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
-	(114, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15);
+	(115, 'Laptop', 'Laptop de última generación', 1200.99, 10),
+	(116, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
+	(117, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
+	(118, 'Laptop', 'Laptop de última generación', 1200.99, 10),
+	(119, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
+	(120, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
+	(121, 'Laptop', 'Laptop de última generación', 1200.99, 10),
+	(122, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
+	(123, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15),
+	(124, 'Laptop', 'Laptop de última generación', 1200.99, 10),
+	(125, 'Teléfono', 'Smartphone avanzado', 799.5, 25),
+	(126, 'Tablet', 'Tablet de 10 pulgadas', 299.99, 15);
 
--- Dumping structure for table projectr.usuarios
+-- Volcando estructura para tabla projectr.usuarios
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `citizenid` varchar(255) NOT NULL,
   `username` varchar(255) DEFAULT NULL,
@@ -138,18 +97,25 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   UNIQUE KEY `phone_number` (`phone_number`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Dumping data for table projectr.usuarios: ~4 rows (approximately)
+-- Volcando datos para la tabla projectr.usuarios: ~4 rows (aproximadamente)
 INSERT INTO `usuarios` (`citizenid`, `username`, `pwd`, `img`, `phone_number`) VALUES
 	('58a570d8-6b21-4ae6-a2ff-7dda8a06e28e', 'alex', '$2a$10$F4c955TRSduP35pw7k.nuOg0c4bbcO/swpYvjvkhtpBYkel6pWCvW', NULL, '604863373'),
 	('7ac9fee4-9abe-4fec-a1cf-71ec8cbb4cab', 'davide', '$2a$10$obS2kNoPN/xgnPG/BPfXCeKbd5/sYG6van9ULL.Ohe0o.sbEf88YC', NULL, '660596259'),
-	('ID123', 'usuario1', '$2a$10$aeCsqejaNk68vpyyD.njfu2mJqC11dz90wXBmQ902f3S0rEC5gbOS', NULL, '5551234'),
-	('ID456', 'usuario2', '$2a$10$oNHtBux2P8tXFZQEcgzYyurrcR65wag0Gv8D6.wTuDhwLKslBPq5S', NULL, '5555678');
+	('ID123', 'usuario1', '$2a$10$88DPJWxR8/UfI1B7/hM4J.F.pRxDD00ECOXEGILitWC/1LCNroReu', NULL, '5551234'),
+	('ID456', 'usuario2', '$2a$10$izMsDGQxstLDNjQBHCn9mu1/l2Lc8iLP5.pq3oshplxNFFJkv.O32', NULL, '5555678');
 
--- Dumping structure for table projectr.contacts
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+
+
+-- Volcando estructura para tabla projectr.contacts
 CREATE TABLE IF NOT EXISTS `contacts` (
                                           `contactid` int(11) NOT NULL AUTO_INCREMENT,
-    `citizenid` varchar(50) DEFAULT NULL,
-    `phone_number` varchar(50) DEFAULT NULL,
+    `citizenid` varchar(255) DEFAULT NULL,
+    `phone_number` varchar(255) DEFAULT NULL,
     `name` varchar(255) DEFAULT NULL,
     PRIMARY KEY (`contactid`),
     UNIQUE KEY `UC_Contact` (`citizenid`,`phone_number`),
@@ -158,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `contacts` (
     CONSTRAINT `contacts_ibfk_2` FOREIGN KEY (`phone_number`) REFERENCES `usuarios` (`phone_number`)
     ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
--- Dumping data for table projectr.contacts: ~2 rows (approximately)
+-- Volcando datos para la tabla projectr.contacts: ~2 rows (aproximadamente)
 INSERT INTO `contacts` (`contactid`, `citizenid`, `phone_number`, `name`) VALUES
                                                                               (2, '58a570d8-6b21-4ae6-a2ff-7dda8a06e28e', '660596259', 'Davide desde alex :)'),
                                                                               (8, '58a570d8-6b21-4ae6-a2ff-7dda8a06e28e', '5551234', 'ausuario1 desde alex :)');

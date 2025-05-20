@@ -49,7 +49,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList("http://localhost:8100"));
+        config.setAllowedOrigins(Arrays.asList("http://localhost:8100", "http://192.168.27.27:8100"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
         config.setExposedHeaders(Arrays.asList("Authorization")); // Asegura que el frontend pueda leer el header

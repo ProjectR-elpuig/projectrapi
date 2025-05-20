@@ -1,6 +1,7 @@
 package com.alex.projectrapi.controller;
 
 import com.alex.projectrapi.model.Contacto;
+import com.alex.projectrapi.model.Usuario;
 import com.alex.projectrapi.repository.ContactoRepository;
 import com.alex.projectrapi.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,35 @@ public class ContactoController {
                 .orElse(null);
     }
 
+    // Actualizar un contacto existente
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateContact(
+            @PathVariable Integer id,
+            @RequestBody ContactoRequest request) {
+
+        return contactoRepository.findById(id)
+                .map(contactoExistente -> {
+                    // Buscar el usuario asociado al nuevo citizenId
+                    Optional<Usuario> nuevoUsuario = usuarioRepository.findById(request.getCitizenId());
+                    // Buscar el contacto por el nuevo número de teléfono
+                    Optional<Usuario> nuevoContacto = usuarioRepository.findByPhoneNumber(request.getPhoneNumber());
+
+                    if (nuevoUsuario.isPresent() && nuevoContacto.isPresent()) {
+                        // Actualizar los campos
+                        contactoExistente.setUsuario(nuevoUsuario.get());
+                        contactoExistente.setContacto(nuevoContacto.get());
+                        contactoExistente.setName(request.getName());
+
+                        // Guardar cambios
+                        Contacto contactoActualizado = contactoRepository.save(contactoExistente);
+                        return ResponseEntity.ok(contactoActualizado);
+                    } else {
+                        return ResponseEntity.badRequest().body("Usuario o teléfono no encontrado");
+                    }
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     // Eliminar contacto
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteContact(@PathVariable Integer id) {
@@ -83,11 +113,28 @@ public class ContactoController {
         private String name;
 
         // Getters y Setters
-        public String getCitizenId() { return citizenId; }
-        public void setCitizenId(String citizenId) { this.citizenId = citizenId; }
-        public String getPhoneNumber() { return phoneNumber; }
-        public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
-        public String getName() { return name; }
-        public void setName(String name) { this.name = name; }
+        public String getCitizenId() {
+            return citizenId;
+        }
+
+        public void setCitizenId(String citizenId) {
+            this.citizenId = citizenId;
+        }
+
+        public String getPhoneNumber() {
+            return phoneNumber;
+        }
+
+        public void setPhoneNumber(String phoneNumber) {
+            this.phoneNumber = phoneNumber;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 }

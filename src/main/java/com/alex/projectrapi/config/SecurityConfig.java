@@ -52,6 +52,7 @@ public class SecurityConfig {
         config.setAllowedOrigins(Arrays.asList("http://localhost:8100", "http://192.168.27.27:8100"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
+        config.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept", "X-Requested-With"));
         config.setExposedHeaders(Arrays.asList("Authorization")); // Asegura que el frontend pueda leer el header
         config.setAllowCredentials(true); // Permite cookies o credenciales
 

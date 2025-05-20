@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,12 +19,19 @@ import java.util.Optional;
 public class ProfileController {
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
     private UsuarioRepository usuarioRepository;
 
     @GetMapping
     public ResponseEntity<Usuario> getProfile(@AuthenticationPrincipal UserDetails userDetails) {
         return usuarioRepository.findByUsername(userDetails.getUsername())
-                .map(ResponseEntity::ok)
+                .map(user -> {
+                    // Asegurar que los campos necesarios están presentes
+                    return ResponseEntity.ok()
+                            .body(user);
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
 
@@ -63,5 +71,57 @@ public class ProfileController {
                     return ResponseEntity.ok(usuarioRepository.save(user));
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<String> changePassword(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @RequestBody ChangePasswordRequest request) {
+        return usuarioRepository.findByUsername(userDetails.getUsername())
+                .map(user -> {
+                    // Verificar contraseña actual (comparando el hash)
+                    if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPwd())) {
+                        return ResponseEntity.badRequest().body("Contraseña actual incorrecta");
+                    }
+                    if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+                        return ResponseEntity.badRequest().body("Las contraseñas no coinciden");
+                    }
+                    // Codificar la nueva contraseña
+                    user.setPwd(passwordEncoder.encode(request.getNewPassword()));
+                    usuarioRepository.save(user);
+                    return ResponseEntity.ok("Contraseña cambiada con éxito");
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Clase DTO para la solicitud
+    private static class ChangePasswordRequest {
+        private String currentPassword;
+        private String newPassword;
+        private String confirmPassword;
+
+        public String getCurrentPassword() {
+            return currentPassword;
+        }
+
+        public void setCurrentPassword(String currentPassword) {
+            this.currentPassword = currentPassword;
+        }
+
+        public String getNewPassword() {
+            return newPassword;
+        }
+
+        public void setNewPassword(String newPassword) {
+            this.newPassword = newPassword;
+        }
+
+        public String getConfirmPassword() {
+            return confirmPassword;
+        }
+
+        public void setConfirmPassword(String confirmPassword) {
+            this.confirmPassword = confirmPassword;
+        }
     }
 }

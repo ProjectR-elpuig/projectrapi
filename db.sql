@@ -5,16 +5,6 @@
 -- HeidiSQL Versión:             12.7.0.6850
 -- --------------------------------------------------------
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-
 -- Volcando estructura de base de datos para projectr
 CREATE DATABASE IF NOT EXISTS `projectr` /*!40100 DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci */;
 USE `projectr`;
@@ -37,12 +27,6 @@ INSERT INTO `usuarios` (`citizenid`, `username`, `pwd`, `img`, `phone_number`) V
 	('7ac9fee4-9abe-4fec-a1cf-71ec8cbb4cab', 'davide', '$2a$10$obS2kNoPN/xgnPG/BPfXCeKbd5/sYG6van9ULL.Ohe0o.sbEf88YC', NULL, '660596259'),
 	('ID123', 'usuario1', '$2a$10$88DPJWxR8/UfI1B7/hM4J.F.pRxDD00ECOXEGILitWC/1LCNroReu', NULL, '5551234'),
 	('ID456', 'usuario2', '$2a$10$izMsDGQxstLDNjQBHCn9mu1/l2Lc8iLP5.pq3oshplxNFFJkv.O32', NULL, '5555678');
-
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
 
 
 -- Volcando estructura para tabla projectr.contacts

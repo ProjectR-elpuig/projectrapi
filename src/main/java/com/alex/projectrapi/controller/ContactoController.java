@@ -34,7 +34,7 @@ public class ContactoController {
         List<Contacto> contactos = contactoRepository.findByUsuarioCitizenId(citizenid);
 
         if (contactos.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.ok(contactos);
         }
         // Ordenamos alfabeticamente
         Collections.sort(contactos);

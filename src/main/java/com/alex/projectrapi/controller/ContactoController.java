@@ -49,7 +49,7 @@ public class ContactoController {
     // Obtener contacto por ID
     @GetMapping("/{id}")
     public ResponseEntity<Contacto> getContactById(@PathVariable Integer id) {
-        return contactoRepository.findById(id)
+        return contactoRepository.findByIdWithUsuario(id) // Usar la consulta que carga relaciones
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

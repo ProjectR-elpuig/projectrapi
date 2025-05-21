@@ -23,10 +23,8 @@ public class Contacto implements Comparable<Contacto> {
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "isblocked", columnDefinition = "boolean default false")
+    @Column(name = "isblocked")
     private Boolean isBlocked = false;
-
-// Añadir getter y setter (si usas Lombok @Data, los genera automáticamente)
 
     @Override
     public int compareTo(Contacto o) {

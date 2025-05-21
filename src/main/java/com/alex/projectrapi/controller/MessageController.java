@@ -73,11 +73,9 @@ public class MessageController {
             throw new RuntimeException("Acceso no autorizado a esta conversación");
         }
 
-        String otherUserPhone = contacto.getContacto().getPhoneNumber();
-
         List<Message> messages = messageService.getConversation(
                 currentUser.getPhoneNumber(),
-                otherUserPhone
+                contacto.getContacto().getPhoneNumber()
         );
 
         return ResponseEntity.ok(messages);

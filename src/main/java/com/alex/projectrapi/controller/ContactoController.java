@@ -149,6 +149,27 @@ public class ContactoController {
         return ResponseEntity.ok(contactos);
     }
 
+    // Endpoint para activar el chat
+    @PutMapping("/{id}/start-chat")
+    public ResponseEntity<?> startChat(
+            @PathVariable Integer id,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        String citizenId = usuarioRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"))
+                .getCitizenId();
+
+        return contactoRepository.findByIdWithUsuario(id)
+                .map(contacto -> {
+                    if (!contacto.getUsuario().getCitizenId().equals(citizenId)) {
+                        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permisos");
+                    }
+                    contacto.setIsChatting(true);
+                    return ResponseEntity.ok(contactoRepository.save(contacto));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     // Clase DTO para solicitudes
     private static class ContactoRequest {
         private String citizenId;

@@ -23,8 +23,11 @@ public class Contacto implements Comparable<Contacto> {
     @Column(nullable = false)
     private String name;
 
-    @Column(name = "isblocked")
+    @Column(name = "isblocked" , columnDefinition = "TINYINT(1) default 0")
     private Boolean isBlocked = false;
+
+    @Column(name = "ischatting", columnDefinition = "TINYINT(1) default 0")
+    private Boolean isChatting = false;
 
     @Override
     public int compareTo(Contacto o) {

@@ -5,7 +5,10 @@ import com.alex.projectrapi.model.Usuario;
 import com.alex.projectrapi.repository.ContactoRepository;
 import com.alex.projectrapi.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -97,9 +100,21 @@ public class ContactoController {
 
     // Eliminar contacto
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteContact(@PathVariable Integer id) {
-        return contactoRepository.findById(id)
+    public ResponseEntity<?> deleteContact(
+            @PathVariable Integer id,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        String citizenId = usuarioRepository.findByUsername(userDetails.getUsername()).get().getCitizenId();
+
+        System.out.println(citizenId);
+
+        // Usar findByIdWithUsuario en lugar de findById
+        return contactoRepository.findByIdWithUsuario(id)
                 .map(contacto -> {
+                    // Verificar propiedad
+                    if (!contacto.getUsuario().getCitizenId().equals(citizenId)) {
+                        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permisos");
+                    }
                     contactoRepository.delete(contacto);
                     return ResponseEntity.ok().build();
                 })

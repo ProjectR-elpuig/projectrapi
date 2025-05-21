@@ -12,7 +12,7 @@ public class Contacto implements Comparable<Contacto> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer contactid;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "citizenid", referencedColumnName = "citizenid")
     private Usuario usuario;
 

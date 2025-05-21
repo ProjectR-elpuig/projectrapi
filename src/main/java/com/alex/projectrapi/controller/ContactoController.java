@@ -120,6 +120,35 @@ public class ContactoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/{id}/block")
+    public ResponseEntity<?> toggleBlockContact(
+            @PathVariable Integer id,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        String citizenId = usuarioRepository.findByUsername(userDetails.getUsername()).get().getCitizenId();
+
+        return contactoRepository.findByIdWithUsuario(id)
+                .map(contacto -> {
+                    if (!contacto.getUsuario().getCitizenId().equals(citizenId)) {
+                        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permisos");
+                    }
+                    contacto.setIsBlocked(!contacto.getIsBlocked()); // Invertir estado
+                    return ResponseEntity.ok(contactoRepository.save(contacto));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Obtener contactos bloqueados
+    @GetMapping("/blocked")
+    public ResponseEntity<List<Contacto>> getBlockedContacts(@AuthenticationPrincipal UserDetails userDetails) {
+        String citizenId = usuarioRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"))
+                .getCitizenId();
+
+        List<Contacto> contactos = contactoRepository.findBlockedContactsByCitizenId(citizenId);
+        return ResponseEntity.ok(contactos);
+    }
+
     // Clase DTO para solicitudes
     private static class ContactoRequest {
         private String citizenId;

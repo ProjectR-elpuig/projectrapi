@@ -106,7 +106,6 @@ public class ContactoController {
 
         String citizenId = usuarioRepository.findByUsername(userDetails.getUsername()).get().getCitizenId();
 
-        System.out.println(citizenId);
 
         // Usar findByIdWithUsuario en lugar de findById
         return contactoRepository.findByIdWithUsuario(id)

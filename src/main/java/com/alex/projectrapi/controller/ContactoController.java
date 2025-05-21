@@ -170,6 +170,17 @@ public class ContactoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Obtener contactos en chat
+    @GetMapping("/chats")
+    public ResponseEntity<List<Contacto>> getChattingContacts(@AuthenticationPrincipal UserDetails userDetails) {
+        String citizenId = usuarioRepository.findByUsername(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"))
+                .getCitizenId();
+
+        List<Contacto> contactos = contactoRepository.findChattingContactsByCitizenId(citizenId);
+        return ResponseEntity.ok(contactos);
+    }
+
     // Clase DTO para solicitudes
     private static class ContactoRequest {
         private String citizenId;

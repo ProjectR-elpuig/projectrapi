@@ -16,4 +16,7 @@ public interface ContactoRepository extends JpaRepository<Contacto, Integer> {
 
     @Query("SELECT c FROM Contacto c LEFT JOIN FETCH c.usuario u WHERE u.citizenId = :citizenId AND c.isBlocked = true")
     List<Contacto> findBlockedContactsByCitizenId(@Param("citizenId") String citizenId);
+
+    @Query("SELECT c FROM Contacto c WHERE c.usuario.citizenId = :citizenId AND c.isChatting = true")
+    List<Contacto> findChattingContactsByCitizenId(@Param("citizenId") String citizenId);
 }

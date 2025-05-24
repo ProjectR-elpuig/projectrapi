@@ -1,9 +1,11 @@
 package com.alex.projectrapi.config;
 
+import com.alex.projectrapi.model.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,8 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+//    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final Key SECRET_KEY = Keys.hmacShaKeyFor("481d556b51c4fb8b7b6a006a875e7bb0dd1bc2fda4784e59e2616eefc1c2c9f8".getBytes());
     private static final long EXPIRATION_TIME = 86400000; // 24 horas en milisegundos
 
     public String generateToken(UserDetails userDetails) {
@@ -36,11 +39,23 @@ public class JwtService {
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
+        System.out.println("Username: " + username);
+        System.out.println("TOKEN: " + token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public UserDetails extractUserDetails(String token) {
+
+        return extractClaim(token, claims -> {
+            System.out.println("Claims: " + claims);
+            String username = claims.getSubject();
+            String roles = claims.get("roles", String.class);
+            return User.withUsername(username).password("").authorities(roles).build();
+        });
     }
 
     public Date extractExpiration(String token) {

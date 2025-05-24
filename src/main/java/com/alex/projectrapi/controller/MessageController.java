@@ -6,6 +6,7 @@ import com.alex.projectrapi.model.Usuario;
 import com.alex.projectrapi.repository.ContactoRepository;
 import com.alex.projectrapi.repository.UsuarioRepository;
 import com.alex.projectrapi.service.MessageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -33,27 +34,21 @@ public class MessageController {
             @PathVariable Integer contactId,
             @RequestBody MessageRequest messageRequest) {
 
-        // Obtener usuario actual
         Usuario sender = usuarioRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        // Obtener contacto y validar pertenencia
         Contacto contacto = contactoRepository.findById(contactId)
                 .orElseThrow(() -> new RuntimeException("Contacto no encontrado"));
 
-        if(!contacto.getUsuario().getCitizenId().equals(sender.getCitizenId())) {
-            throw new RuntimeException("No tienes permiso para enviar a este contacto");
-        }
-
-        // Obtener teléfono del contacto
-        String receiverPhone = contacto.getContacto().getPhoneNumber();
+        // Obtener citizenid del receptor
+        String receiverCitizenId = contacto.getContacto().getCitizenId();
 
         Message message = messageService.saveMessage(
-                sender.getPhoneNumber(),
-                receiverPhone,
+                sender.getCitizenId(), // Usar citizenid del remitente
+                receiverCitizenId,     // Usar citizenid del receptor
                 messageRequest.getContent()
         );
-
+        System.out.println("Mensaje enviado: " + message);
         return ResponseEntity.ok(message);
     }
 

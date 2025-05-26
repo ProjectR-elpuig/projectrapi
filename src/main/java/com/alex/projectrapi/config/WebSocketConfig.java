@@ -19,47 +19,17 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final JwtService jwtService;
-
-    public WebSocketConfig(JwtService jwtService) {
-        this.jwtService = jwtService;
-    }
-
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(new ChannelInterceptor() {
-            @Override
-            public Message<?> preSend(Message<?> message, MessageChannel channel) {
-                StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    String token = accessor.getFirstNativeHeader("Authorization");
-                    if (token == null || !token.startsWith("Bearer ")) {
-                        throw new AuthenticationCredentialsNotFoundException("Token no proporcionado");
-                    }
-                    String jwt = token.substring(7);
-                    UserDetails userDetails = jwtService.extractUserDetails(jwt); // Usar el token sin "Bearer "
-                    if (!jwtService.validateToken(jwt, userDetails)) {
-                        throw new AuthenticationCredentialsNotFoundException("Token inválido");
-                    }
-                }
-                return message;
-            }
-        });
-    }
-
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry config) {
-        config.enableSimpleBroker("/topic", "/queue");
-        config.setApplicationDestinationPrefixes("/app");
-        config.setUserDestinationPrefix("/user");
-    }
-
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/api/ws")
+        registry
+                .addEndpoint("/ws")
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
     }
 
-
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.setApplicationDestinationPrefixes("/app");
+        registry.enableSimpleBroker("/topic");
+    }
 }

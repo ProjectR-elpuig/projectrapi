@@ -2,6 +2,7 @@ package com.alex.projectrapi.controller;
 
 import com.alex.projectrapi.model.Chat;
 import com.alex.projectrapi.model.Contacto;
+import com.alex.projectrapi.model.Usuario;
 import com.alex.projectrapi.repository.ContactoRepository;
 import com.alex.projectrapi.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,14 @@ public class ChatControllerAPI {
         String num1 = contacto.getUsuario().getPhoneNumber();
         String num2 = contacto.getContacto().getPhoneNumber();
 
+        boolean contactHaveUser = contactoRepository.findByUsuarioCitizenId(contacto.getContacto().getCitizenId()).stream().anyMatch(c -> {
+            return c.getContacto().getPhoneNumber().equals(num1);
+        });
+
+        if (!contactHaveUser) {
+            crearNuevoContactoInverso(contacto.getUsuario(), contacto.getContacto());
+        }
+
         // Buscar chat existente
         Chat chatExistente = chats.stream()
                 .filter(chat ->
@@ -69,6 +78,19 @@ public class ChatControllerAPI {
             idChat[0] = UUID.randomUUID().toString(); // Modificamos el contenido, no la referencia
         } while (chats.stream().anyMatch(chat -> chat.getId().equals(idChat[0])));
         return idChat[0];
+    }
+
+    private void crearNuevoContactoInverso(Usuario usuarioOrigen, Usuario usuarioDestino) {
+        boolean contactoInversoExiste = contactoRepository.existsByUsuarioAndContacto(usuarioDestino, usuarioOrigen);
+
+        if (!contactoInversoExiste) {
+            Contacto contacto = new Contacto();
+            contacto.setUsuario(usuarioDestino);
+            contacto.setContacto(usuarioOrigen);
+            contacto.setName(usuarioOrigen.getPhoneNumber());
+            contacto.setIsChatting(true);
+            contactoRepository.save(contacto);
+        }
     }
 
 }

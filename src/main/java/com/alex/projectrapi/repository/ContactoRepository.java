@@ -1,6 +1,7 @@
 package com.alex.projectrapi.repository;
 
 import com.alex.projectrapi.model.Contacto;
+import com.alex.projectrapi.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +20,6 @@ public interface ContactoRepository extends JpaRepository<Contacto, Integer> {
 
     @Query("SELECT c FROM Contacto c WHERE c.usuario.citizenId = :citizenId AND c.isChatting = true")
     List<Contacto> findChattingContactsByCitizenId(@Param("citizenId") String citizenId);
+
+    boolean existsByUsuarioAndContacto(Usuario usuario, Usuario contacto);
 }

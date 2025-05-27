@@ -1,6 +1,7 @@
 package com.alex.projectrapi.controller;
 
 import com.alex.projectrapi.model.ChatMessage;
+import com.alex.projectrapi.model.MessageType;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
@@ -31,5 +32,23 @@ public class ChatController {
         headerAccessor.getSessionAttributes().put("chatId", chatMessage.getChatId());
 
         messagingTemplate.convertAndSend("/topic/chat." + chatMessage.getChatId(), chatMessage);
+    }
+
+    @MessageMapping("/chat.disconnect")
+    public void disconnectUser(@Payload ChatMessage chatMessage, SimpMessageHeaderAccessor headerAccessor) {
+        System.out.println("Disconnected from user: " + headerAccessor.getSessionAttributes().get("username"));
+        String sessionId = headerAccessor.getSessionAttributes().get("sessionId").toString();
+
+        // Notificar a los demás usuarios
+        ChatMessage leaveMessage = new ChatMessage();
+        leaveMessage.setType(MessageType.LEAVE);
+        leaveMessage.setSender(chatMessage.getSender());
+        leaveMessage.setChatId(chatMessage.getChatId());
+
+        messagingTemplate.convertAndSend("/topic/chat." + chatMessage.getChatId(), leaveMessage);
+
+        // Limpiar la sesión
+        headerAccessor.getSessionAttributes().remove("username");
+        headerAccessor.getSessionAttributes().remove("chatId");
     }
 }

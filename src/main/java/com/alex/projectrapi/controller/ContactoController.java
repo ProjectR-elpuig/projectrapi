@@ -1,8 +1,11 @@
 package com.alex.projectrapi.controller;
 
 import com.alex.projectrapi.model.Contacto;
+import com.alex.projectrapi.model.ContactoChat;
+import com.alex.projectrapi.model.Message;
 import com.alex.projectrapi.model.Usuario;
 import com.alex.projectrapi.repository.ContactoRepository;
+import com.alex.projectrapi.repository.MessageRepository;
 import com.alex.projectrapi.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -25,6 +29,9 @@ public class ContactoController {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private MessageRepository messageRepository;
 
     // Obtener todos los contactos
     @GetMapping
@@ -172,13 +179,30 @@ public class ContactoController {
 
     // Obtener contactos en chat
     @GetMapping("/chats")
-    public ResponseEntity<List<Contacto>> getChattingContacts(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<List<ContactoChat>> getChattingContacts(@AuthenticationPrincipal UserDetails userDetails) {
         String citizenId = usuarioRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"))
                 .getCitizenId();
 
         List<Contacto> contactos = contactoRepository.findChattingContactsByCitizenId(citizenId);
-        return ResponseEntity.ok(contactos);
+
+        List<ContactoChat> dtos = contactos.stream().map(contacto -> {
+            String userPhone = contacto.getUsuario().getPhoneNumber();
+            String contactPhone = contacto.getContacto().getPhoneNumber();
+
+            Message lastMsg = messageRepository.findLastMessageBetween(userPhone, contactPhone);
+
+            return new ContactoChat(
+                    contacto.getContactid(),
+                    contacto.getName(),
+                    contacto.getContacto().getPhoneNumber(),
+                    contacto.getContacto().getImg(),
+                    lastMsg != null ? lastMsg.getContent() : "No hay mensajes",
+                    lastMsg != null ? lastMsg.getCreatedAt() : null
+            );
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(dtos);
     }
 
     // Clase DTO para solicitudes

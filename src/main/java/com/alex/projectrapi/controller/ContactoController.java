@@ -14,9 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
@@ -53,6 +51,18 @@ public class ContactoController {
         return ResponseEntity.ok(contactos);
     }
 
+    // Obtener contacto por citizenid del usuario y numero
+    @GetMapping("/citizen/{citizenid}/{phoneNumber}")
+    public ResponseEntity<Optional<Contacto>> getContactByPhoneNumberAndCitizenId(@PathVariable String citizenid, @PathVariable String phoneNumber) {
+        Optional<Contacto> contacto = contactoRepository.findByUsuarioCitizenIdAndContactoPhoneNumber(citizenid, phoneNumber);
+
+        if (contacto != null && contacto.isPresent()) {
+            return ResponseEntity.ok(contacto);
+        }
+
+        return ResponseEntity.ok(contacto);
+    }
+
     // Obtener contacto por ID
     @GetMapping("/{id}")
     public ResponseEntity<Contacto> getContactById(@PathVariable Integer id) {
@@ -60,6 +70,18 @@ public class ContactoController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    // Obtener usuario por phoneNumber si existe
+    @GetMapping("/phoneNumber/{phoneNumber}")
+    public ResponseEntity<Map<String, Object>> getUsuarioByPhoneNumber(@PathVariable String phoneNumber) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByPhoneNumber(phoneNumber);
+        Map<String, Object> response = new HashMap<>();
+        response.put("found", usuarioOpt.isPresent());
+        response.put("usuario", usuarioOpt.orElse(null));
+        return ResponseEntity.ok(response);
+    }
+
+
 
     // Crear nuevo contacto
     @PostMapping

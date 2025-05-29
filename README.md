@@ -1,4 +1,4 @@
-# ProjectR API - Sistema de Mensajería Instantánea
+# V-Link API - Sistema de Mensajería Instantánea
 
 [![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.4.5-green.svg)]()
 [![Java](https://img.shields.io/badge/Java-24-blue.svg)]()

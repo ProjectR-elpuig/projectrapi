@@ -17,8 +17,8 @@ public class LoadDatabase {
             // Productos de prueba
 
             // Usuarios de prueba con contraseñas encriptadas
-            usuarioRepository.save(new Usuario("ID123", "usuario1", passwordEncoder.encode("clave123"), "5551234", null));
-            usuarioRepository.save(new Usuario("ID456", "usuario2", passwordEncoder.encode("clave456"), "5555678", null));
+//            usuarioRepository.save(new Usuario("ID123", "usuario1", passwordEncoder.encode("clave123"), "5551234", null));
+//            usuarioRepository.save(new Usuario("ID456", "usuario2", passwordEncoder.encode("clave456"), "5555678", null));
         };
     }
 }

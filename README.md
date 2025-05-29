@@ -42,3 +42,7 @@ graph TD
     E --> F[MySQL Database]
     D --> G[Broker de Mensajes]
     C --> H[JWT Authentication]
+```
+
+## Diagrama de flujo de Chat 
+![Diagrama de flujo de Chat](images/diagrama_flujo_chat.png)

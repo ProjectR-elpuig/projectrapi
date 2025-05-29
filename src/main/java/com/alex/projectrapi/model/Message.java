@@ -28,11 +28,7 @@ public class Message {
     @Column(name = "created_at")
     private Date createdAt;
 
-    @Column(name = "`read`") // Escapa el nombre con comillas invertidas
-    private boolean read;
-
     public Message() {
         this.createdAt = new Date();
-        this.read = false;
     }
 }

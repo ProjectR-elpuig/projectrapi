@@ -41,6 +41,8 @@ public class ChatControllerAPI {
         String num1 = contacto.getUsuario().getPhoneNumber();
         String num2 = contacto.getContacto().getPhoneNumber();
 
+        if (contacto.getIsBlocked()) return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
         boolean contactHaveUser = contactoRepository.findByUsuarioCitizenId(contacto.getContacto().getCitizenId()).stream().anyMatch(c -> {
             return c.getContacto().getPhoneNumber().equals(num1);
         });

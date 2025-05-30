@@ -1,32 +1,47 @@
 package com.alex.projectrapi.controller;
 
 import com.alex.projectrapi.model.ChatMessage;
+import com.alex.projectrapi.model.Contacto;
 import com.alex.projectrapi.model.MessageType;
 import com.alex.projectrapi.model.Usuario;
+import com.alex.projectrapi.repository.ContactoRepository;
 import com.alex.projectrapi.repository.UsuarioRepository;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
+import java.util.Optional;
+
 @Controller
 public class ChatController {
 
     private final SimpMessageSendingOperations messagingTemplate;
     private final UsuarioRepository usuarioRepository;
+    private final ContactoRepository contactoRepository;
 
-    public ChatController(SimpMessageSendingOperations messagingTemplate, UsuarioRepository usuarioRepository) {
+    public ChatController(SimpMessageSendingOperations messagingTemplate, UsuarioRepository usuarioRepository, ContactoRepository contactoRepository) {
         this.messagingTemplate = messagingTemplate;
         this.usuarioRepository = usuarioRepository;
+        this.contactoRepository = contactoRepository;
     }
 
     @MessageMapping("/chat.sendMessage")
     public void sendMessage(@Payload ChatMessage chatMessage) {
         messagingTemplate.convertAndSend("/topic/chat." + chatMessage.getChatId(), chatMessage);
         if (chatMessage.getType() == MessageType.CHAT) {
-//            Usuario receiver = usuarioRepository.findByPhoneNumber(chatMessage.getReceiverPhoneNumber()).get();
-            messagingTemplate.convertAndSend("/topic/user." + chatMessage.getReceiverPhoneNumber(), chatMessage);
+            Optional<Usuario> sender = usuarioRepository.findByCitizenId(chatMessage.getSenderCitizenId());
+            if (sender.isPresent()) {
+                Optional<Contacto> receiver = contactoRepository.findByUsuarioCitizenIdAndContactoPhoneNumber(sender.get().getCitizenId(), chatMessage.getReceiverPhoneNumber());
+                if (receiver.isPresent()) {
+                    receiver = contactoRepository.findByUsuarioCitizenIdAndContactoPhoneNumber(receiver.get().getContacto().getCitizenId(), sender.get().getPhoneNumber());
+                    if (receiver.isPresent() && !receiver.get().getIsBlocked()) {
+                        messagingTemplate.convertAndSend("/topic/user." + chatMessage.getReceiverPhoneNumber(), chatMessage);
+                    }
+                }
+            }
         }
     }
 

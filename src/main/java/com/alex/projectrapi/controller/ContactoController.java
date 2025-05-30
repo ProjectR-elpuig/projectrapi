@@ -237,8 +237,9 @@ public class ContactoController {
                     contacto.getName(),
                     contacto.getContacto().getPhoneNumber(),
                     contacto.getContacto().getImg(),
-                    lastMsg != null ? lastMsg.getContent() : "No hay mensajes",
-                    lastMsg != null ? lastMsg.getCreatedAt() : null
+                    lastMsg != null ? lastMsg.getContent() : "No message yet",
+                    lastMsg != null ? lastMsg.getCreatedAt() : null,
+                    contacto.getIsBlocked()
             );
         }).collect(Collectors.toList());
 

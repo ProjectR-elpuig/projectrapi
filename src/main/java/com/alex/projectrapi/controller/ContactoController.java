@@ -167,6 +167,24 @@ public class ContactoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/{id}/chatting")
+    public ResponseEntity<?> toggleChattingContact(
+            @PathVariable Integer id,
+            @AuthenticationPrincipal UserDetails userDetails) {
+
+        String citizenId = usuarioRepository.findByUsername(userDetails.getUsername()).get().getCitizenId();
+
+        return contactoRepository.findByIdWithUsuario(id)
+                .map(contacto -> {
+                    if (!contacto.getUsuario().getCitizenId().equals(citizenId)) {
+                        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("No tienes permisos");
+                    }
+                    contacto.setIsChatting(!contacto.getIsChatting());
+                    return ResponseEntity.ok(contactoRepository.save(contacto));
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     // Obtener contactos bloqueados
     @GetMapping("/blocked")
     public ResponseEntity<List<Contacto>> getBlockedContacts(@AuthenticationPrincipal UserDetails userDetails) {
